@@ -17,7 +17,8 @@ img_cv2 = cv2.imread(image_path)
 
 # Convert to grayscale
 img_gray = cv2.cvtColor(img_cv2, cv2.COLOR_RGB2GRAY)
-img_resized = cv2.resize(img_gray, (600, 400))
+# img_resized = cv2.resize(img_gray, (600, 400))
+img_resized = img_gray
 
 # Apply GaussianBlur to reduce noise
 blurred = cv2.GaussianBlur(img_resized, (5, 5), 0)
@@ -49,7 +50,16 @@ for i in range(1, len(contours)):
         current_contour = contours[i]
 merged_contour.append(current_contour)
 
-for i in range(len(merged_contour) - 1):
+# Last two dots is the reference point
+reference = 10 # Reference in millimeter
+rect1 = cv2.boundingRect(merged_contour[len(merged_contour)-1])
+rect2 = cv2.boundingRect(merged_contour[len(merged_contour)])
+center1 = (rect1[0] + rect1[2] // 2, rect1[1] + rect1[3] // 2)
+center2 = (rect2[0] + rect2[2] // 2, rect2[1] + rect2[3] // 2)
+distance = np.sqrt((center1[0] - center2[0])**2 + (center1[1] - center2[1])**2) # in Pixels
+resolution = reference / distance # millimeter / pixel
+
+for i in range(len(merged_contour) - 3):
     rect1 = cv2.boundingRect(merged_contour[i])
     rect2 = cv2.boundingRect(merged_contour[i + 1])
     
@@ -62,7 +72,7 @@ for i in range(len(merged_contour) - 1):
     cv2.circle(img_resized, center1, 5, (255, 0, 0), -1)
     cv2.circle(img_resized, center2, 5, (255, 0, 0), -1)
     cv2.line(img_resized, center1, center2, (255, 255, 0), 2)
-    distance_in_mm = distance * 0.1/6
+    distance_in_mm = distance * resolution
     print(f"Distance between objects: {distance} pixels")
     print(f"Distance in mm = {distance_in_mm} mm")
     
