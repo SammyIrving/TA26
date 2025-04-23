@@ -52,12 +52,13 @@ merged_contour.append(current_contour)
 
 # Last two dots is the reference point
 reference = 10 # Reference in millimeter
-rect1 = cv2.boundingRect(merged_contour[len(merged_contour)-1])
-rect2 = cv2.boundingRect(merged_contour[len(merged_contour)])
+rect1 = cv2.boundingRect(merged_contour[len(merged_contour)-2])
+rect2 = cv2.boundingRect(merged_contour[len(merged_contour)-1])
 center1 = (rect1[0] + rect1[2] // 2, rect1[1] + rect1[3] // 2)
 center2 = (rect2[0] + rect2[2] // 2, rect2[1] + rect2[3] // 2)
 distance = np.sqrt((center1[0] - center2[0])**2 + (center1[1] - center2[1])**2) # in Pixels
 resolution = reference / distance # millimeter / pixel
+print(f"resolusi yang diperoleh adalah {resolution} mm/pixel")
 
 for i in range(len(merged_contour) - 3):
     rect1 = cv2.boundingRect(merged_contour[i])
