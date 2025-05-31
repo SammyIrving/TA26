@@ -175,7 +175,7 @@ int main(void) {
 
     int pwm = mapFlowToPWM(flow);
     gpioPWM(EN_A, pwm);
-    printf("âœ“ Pompa dijalankan pada %d ml/min (PWM: %d)\n", flow, pwm);
+    printf("✓ Pompa dijalankan pada %d ml/min (PWM: %d)\n", flow, pwm);
 
     float flow_sum = 0.0;
     int reading_count = 0;
@@ -200,7 +200,7 @@ int main(void) {
                 if (c == '\n') {
                     input_buf[input_pos] = '\0';
                     if (strcmp(input_buf, "x") == 0 || strcmp(input_buf, "exit") == 0) {
-                        printf("âŒ Perintah keluar diterima. Menghentikan pompa...\n");
+                        printf("❌ Perintah keluar diterima. Menghentikan pompa...\n");
                         stop_all = 1;
                         break;
                     }
@@ -214,7 +214,7 @@ int main(void) {
             if (error != NO_ERROR) {
                 error_count++;
                 if (error_count >= 5) {
-                    printf("âŒ Terlalu banyak error pengukuran. Menghentikan...\n");
+                    printf("❌ Terlalu banyak error pengukuran. Menghentikan...\n");
                     break;
                 }
                 continue;
